@@ -1,7 +1,6 @@
 const Axios = require("axios");
 const path = require("path");
 const fs = require("fs");
-const { generateIv, encrypt, decrypt } = require("./crypy");
 
 function atob(str){
   return Buffer.from(str).toString("base64")
@@ -19,7 +18,7 @@ function downloadFile(url,path){
 class File{
   constructor(name){
     this._name = name;
-    this._data = "";
+    this._data = Buffer.from("");
     this._ruta = path.resolve(__dirname)
   }
   get name(){
@@ -30,7 +29,7 @@ class File{
   }
   set data(data){
     if(fs.existsSync(path.resolve(this._ruta)))fs.writeFileSync(path.resolve(this._ruta),data);
-    this._data = data;
+    this._data = Buffer.from(data);
   }
   get data(){
     if(fs.existsSync(path.resolve(this._ruta)))this._data = fs.readFileSync(path.resolve(this._ruta));
@@ -41,7 +40,7 @@ class File{
   }
 }
 
-class Text extends File{
+class Test extends File{
   constructor(name){
     super(name);
     this._ruta = path.resolve(__dirname,"..","test",name);
@@ -59,24 +58,4 @@ class Img extends File{
   }
 }
 
-class SecretFile extends File{
-  constructor(name){
-    super(name);
-    this._ruta = path.resolve(__dirname,"..","test",name);
-    this._iv = atob(generateIv());
-    if(fs.existsSync(this._ruta)){
-      this.data = fs.readFileSync(this._ruta);
-    }else if(!fs.existsSync(this._ruta))fs.writeFileSync(this._ruta,this.data);
-  }
-  setData(data,key){
-    this.data = {
-      data:encrypt(Buffer.from(data),key,Buffer.from(this._iv,"base64")),
-      iv:atob(this._iv)
-    }
-  }
-  getData(key){
-    return decrypt(this.data,key,Buffer.from(this._iv,"base64")).toString()
-  }
-}
-
-module.exports = {atob,btoa,downloadFile,File,Img,Text,SecretFile};
+module.exports = {atob,btoa,downloadFile,File,Img,Test};
