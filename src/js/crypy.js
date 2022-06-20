@@ -23,4 +23,18 @@ const decrypt = (encrypted,key,iv) => {
   return result
 }
 
+class SecretFile extends Text{
+  constructor(name){
+    super(name);
+    this.iv = generateIv();
+  }
+  setData(data,key){
+    this.data = encrypt(Buffer.from(data),key,this.iv);
+    return this;
+  }
+  getData(key){
+    return decrypt(this.data,key,this.iv);
+  }
+}
+
 module.exports = {generateKey,generateIv,encrypt,decrypt};
