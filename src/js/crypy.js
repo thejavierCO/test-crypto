@@ -1,5 +1,4 @@
 const crypto = require('crypto');
-const {Text} = require("../js/tools")
 
 const algorithm = 'aes-256-ctr';
 
@@ -21,20 +20,6 @@ const decrypt = (encrypted,key,iv) => {
   const decipher = crypto.createDecipheriv(algorithm, key, iv)
   const result = Buffer.concat([decipher.update(encrypted), decipher.final()])
   return result
-}
-
-class SecretFile extends Text{
-  constructor(name){
-    super(name);
-    this.iv = generateIv();
-  }
-  setData(data,key){
-    this.data = encrypt(Buffer.from(data),key,this.iv);
-    return this;
-  }
-  getData(key){
-    return decrypt(this.data,key,this.iv);
-  }
 }
 
 module.exports = {generateKey,generateIv,encrypt,decrypt};

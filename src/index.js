@@ -1,13 +1,17 @@
-const {generateIv,generateKey,encrypt,decrypt,SecretFile} = require("./js/crypy.js")
-const {atob,btoa,downloadFile,Img,Text} = require("./js/tools");
+const {generateIv,generateKey,encrypt,decrypt} = require("./js/crypy.js")
+const {atob,btoa,downloadFile,Img,Text,SecretFile} = require("./js/tools");
 
 let fileImageTest0 = new Img("233879.png");
 let fileImageTest1 = new Img("origi.jpg");
 
-let testS = new SecretFile("test");
+let key = generateKey("comida");
 
-console.log(testS);
-// let fileiv = new Text("iv.txt");
+// let testS = new SecretFile("test");
+
+// testS.setData(JSON.stringify({ok:true}),key)
+
+let filetest = new Text("test.txt");
+console.log(filetest);
 // if(fileiv.data.length<=0){fileiv.data = generateIv();}
 
 // let filekey = new Text("key.txt");
