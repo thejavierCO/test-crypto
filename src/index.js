@@ -11,4 +11,5 @@ if(filekey.data.length<=0){filekey.data = generateKey("test_test_test");}
 let fileEnc = new File("testE.txt");
 let fileDec = new File("test.txt");
 
-fileDec.data = encrypt(Buffer.from(JSON.stringify("test")).toString(),filekey.data,fileiv.data);
+fileEnc.data = encrypt(Buffer.from(JSON.stringify("test")).toString(),filekey.data,fileiv.data);
+fileDec.data = decrypt(fileEnc.data);
