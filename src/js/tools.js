@@ -19,8 +19,7 @@ class File{
   constructor(name){
     this._name = name;
     this._data = Buffer.from("");
-    this._ruta = path.resolve(__dirname,"..","test",name)
-    if(!fs.existsSync(this._ruta))fs.writeFileSync(this._ruta,this._data);
+    this._ruta = path.resolve(__dirname)
   }
   get name(){
     return this._name;
@@ -41,4 +40,22 @@ class File{
   }
 }
 
-module.exports = {atob,btoa,downloadFile,File};
+class Text extends File{
+  constructor(name){
+    super(name);
+    this._ruta = path.resolve(__dirname,"..","test",name);
+    if(fs.existsSync(this._ruta))this.data = fs.readFileSync(this._ruta);
+    if(!fs.existsSync(this._ruta))fs.writeFileSync(this._ruta,this.data);
+  }
+}
+
+class Img extends File{
+  constructor(name){
+    super(name);
+    this._ruta = path.resolve(__dirname,"..","img",name);
+    if(fs.existsSync(this._ruta))this.data = fs.readFileSync(this._ruta);
+    if(!fs.existsSync(this._ruta))fs.writeFileSync(this._ruta,this.data);
+  }
+}
+
+module.exports = {atob,btoa,downloadFile,File,Img,Text};

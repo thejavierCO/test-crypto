@@ -1,15 +1,17 @@
 const {generateIv,generateKey,encrypt,decrypt} = require("./js/crypy.js")
-const {atob,btoa,downloadFile,path,File} = require("./js/tools");
+const {atob,btoa,downloadFile,Img,Text} = require("./js/tools");
 
+let fileImageTest0 = new Img("233879.png");
+let fileImageTest1 = new Img("origi.jpg");
 
-let fileiv = new File("iv.txt");
+let fileiv = new Text("iv.txt");
 if(fileiv.data.length<=0){fileiv.data = generateIv();}
 
-let filekey = new File("key.txt");
+let filekey = new Text("key.txt");
 if(filekey.data.length<=0){filekey.data = generateKey("test_test_test");}
 
-let fileEnc = new File("testE.txt");
-let fileDec = new File("test.txt");
+let fileEnc = new Text("testE.txt");
+let fileDec = new Text("test.png");
 
-fileEnc.data = encrypt(Buffer.from(JSON.stringify("test")).toString(),filekey.data,fileiv.data);
-fileDec.data = decrypt(fileEnc.data);
+fileEnc.data = encrypt(fileImageTest1.data,filekey.data,fileiv.data);
+fileDec.data = decrypt(fileEnc.data,filekey.data,fileiv.data);

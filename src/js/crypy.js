@@ -1,4 +1,6 @@
 const crypto = require('crypto');
+const {Text} = require("../js/tools")
+
 const algorithm = 'aes-256-ctr';
 
 function generateKey(str){
