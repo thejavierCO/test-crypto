@@ -25,14 +25,13 @@ async function Main(){
     let fileImageTest0 = Img.getFile("i0.jpg");
     if(fileImageTest0.data.length<=0){
       console.log("descargando imagen 1")
-      await Img.getFileForUrl("https://i.imgur.com/GfUIlC7.jpeg",'i0.jpg').then(e=>{
-        console.log("encrypting image 1")
-        fileEnc0.data = encrypt(
-          Buffer.from(e.data),
-          filekey.data,
-          fileiv.data,
-        )
-      })
+      let file = await Img.getFileForUrl("https://i.imgur.com/GfUIlC7.jpeg",'i0.jpg')
+      console.log("encrypting image 1")
+      fileEnc0.data = encrypt(
+        file.data,
+        filekey.data,
+        fileiv.data,
+      )
     }else{
       console.log("encrypting image 1")
       fileEnc0.data = encrypt(
@@ -46,14 +45,13 @@ async function Main(){
     let fileImageTest1 = Img.getFile("i1.jpg");
     if(fileImageTest1.data.length<=0){
       console.log("descargando imagen 2")
-      await Img.getFileForUrl("https://i.imgur.com/lhffj99.jpeg",'i1.jpg').then(e=>{
-        console.log("encrypting image 2")
-        fileEnc1.data = encrypt(
-          Buffer.from(e.data),
-          filekey.data,
-          fileiv.data,
-        )
-      })
+      let file = await Img.getFileForUrl("https://i.imgur.com/lhffj99.jpeg",'i1.jpg');
+      console.log("encrypting image 2")
+      fileEnc1.data = encrypt(
+        file.data,
+        filekey.data,
+        fileiv.data,
+      )
     }else{
       console.log("encrypting image 2")
       fileEnc1.data = encrypt(
