@@ -1,5 +1,5 @@
 const { generateIv, generateKey, encrypt, decrypt } = require('./js/crypy.js')
-const { atob, btoa, downloadFile, Dir } = require('./js/tools')
+const { Dir } = require('./js/tools')
 
 const Test = new Dir("test")
 const Img = new Dir("img")
