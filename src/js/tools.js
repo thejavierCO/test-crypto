@@ -11,9 +11,12 @@ function btoa(str) {
 }
 
 function downloadFile(url, router) {
-  return Axios.get(url, { responseType: 'stream' }).then((e) =>
-    e.data.pipe(fs.createWriteStream(path.resolve(router))),
-  )
+  return new Promise((res,rej)=>{
+    Axios.get(url, { responseType: 'stream' })
+    .then(e =>e.data.pipe(fs.createWriteStream(path.resolve(router))))
+    .then(e=>e.on("finish",_=>res(e)))
+    .catch(e=>rej(e))
+  }) 
 }
 
 class Dir {
@@ -25,10 +28,13 @@ class Dir {
     return new File(name,this._router)
   }
   getFileForUrl(url,name){
-    const file = new File(name,this._router);
     return new Promise((res,rej)=>{
-      if(file.data.length>0)res(file);
-      else downloadFile(url,path.join(this._router,name)).then(_=>res(file)).catch(e=>rej(e));
+      if(fs.readFileSync(path.join(this._router,name)).length>0)res(new File(name,this._router));
+      else downloadFile(url,path.join(this._router,name))
+      .then(_=>{
+        res(new File(name,this._router))
+      })
+      .catch(e=>rej(e));
     })
   }
 }
