@@ -1,61 +1,59 @@
-const Axios = require("axios");
-const path = require("path");
-const fs = require("fs");
+const Axios = require('axios')
+const path = require('path')
+const fs = require('fs')
 
-function atob(str){
-  return Buffer.from(str).toString("base64")
+function atob(str) {
+  return Buffer.from(str).toString('base64')
 }
 
-function btoa(str){
-  return Buffer.from(str,"base64").toString()
+function btoa(str) {
+  return Buffer.from(str, 'base64').toString()
 }
 
-function downloadFile(url,path){
-  return Axios.get(url,{responseType:"stream"})
-  .then(e=>e.data.pipe(fs.createWriteStream(path.resolve(path))))
+function downloadFile(url, router) {
+  return Axios.get(url, { responseType: 'stream' }).then((e) =>
+    e.data.pipe(fs.createWriteStream(path.resolve(router))),
+  )
 }
 
-class File{
-  constructor(name){
-    this._name = name;
-    this._data = Buffer.from("");
-    this._ruta = path.resolve(__dirname)
+class Dir {
+  constructor(ruta="temp") {
+    this._router = path.join(__dirname,"..",ruta)
+    if(!fs.existsSync(this._router))fs.mkdirSync(this._router)
   }
-  get name(){
-    return this._name;
+  getFile(name) {
+    return new File(name,this._router)
   }
-  set name(n){
-    this._name = n;
-  }
-  set data(data){
-    if(fs.existsSync(path.resolve(this._ruta)))fs.writeFileSync(path.resolve(this._ruta),data);
-    this._data = Buffer.from(data);
-  }
-  get data(){
-    if(fs.existsSync(path.resolve(this._ruta)))this._data = fs.readFileSync(path.resolve(this._ruta));
-    return this._data;
-  }
-  isExist(){
-    return fs.existsSync(this._ruta);
+  getFileForUrl(url,name){
+    const file = new File(name,this._router);
+    return new Promise((res,rej)=>{
+      if(file.data.length>0)res(file);
+      else downloadFile(url,path.join(this._router,name)).then(_=>res(file)).catch(e=>rej(e));
+    })
   }
 }
 
-class Test extends File{
-  constructor(name){
-    super(name);
-    this._ruta = path.resolve(__dirname,"..","test",name);
-    if(fs.existsSync(this._ruta))this.data = fs.readFileSync(this._ruta);
-    if(!fs.existsSync(this._ruta))fs.writeFileSync(this._ruta,this.data);
+class File {
+  constructor(name, ruta) {
+    this._name = name
+    this._data = Buffer.from('')
+    this._ruta = path.join(ruta,name);
+    if(fs.existsSync(this._ruta))this._data = fs.readFileSync(this._ruta);
+    else fs.writeFileSync(this._ruta,this._data);
+  }
+  get name() {
+    return this._name
+  }
+  set name(n) {
+    this._name = n
+  }
+  set data(data) {
+    if (fs.existsSync(path.resolve(this._ruta)))fs.writeFileSync(path.resolve(this._ruta), data)
+    this._data = Buffer.from(data)
+  }
+  get data() {
+    return this._data
   }
 }
 
-class Img extends File{
-  constructor(name){
-    super(name);
-    this._ruta = path.resolve(__dirname,"..","img",name);
-    if(fs.existsSync(this._ruta))this.data = fs.readFileSync(this._ruta);
-    if(!fs.existsSync(this._ruta))fs.writeFileSync(this._ruta,this.data);
-  }
-}
-
-module.exports = {atob,btoa,downloadFile,File,Img,Test};
+module.exports = { atob, btoa, downloadFile, File, Dir }
