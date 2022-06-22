@@ -22,4 +22,22 @@ const decrypt = (encrypted,key,iv) => {
   return result
 }
 
-module.exports = {generateKey,generateIv,encrypt,decrypt};
+const JSONencrypt = (buffer,key,iv)=>{
+  const cipher = crypto.createCipheriv(algorithm, key, iv)
+  const result = Buffer.concat([cipher.update(buffer), cipher.final()])
+  return {
+    cipher,
+    data:result
+  }
+}
+
+const JSONdecrypt = (encrypted,key,iv)=>{
+  const decipher = crypto.createDecipheriv(algorithm, key, iv)
+  const result = Buffer.concat([decipher.update(encrypted), decipher.final()])
+  return {
+    decipher,
+    data:result
+  }
+}
+
+module.exports = {generateKey,generateIv,encrypt,decrypt,JSONdecrypt,JSONencrypt};

@@ -1,4 +1,4 @@
-const { generateIv, generateKey, encrypt, decrypt } = require('./js/crypy.js')
+const { generateIv, generateKey, encrypt, decrypt ,JSONdecrypt,JSONencrypt} = require('./js/crypy.js')
 const { Dir } = require('./js/tools')
 
 const Test = new Dir("test")
@@ -65,5 +65,9 @@ async function Main(){
   let fileDec = Test.getFile('test.jpg');
   fileDec.data = decrypt(fileEnc1.data,filekey.data,fileiv.data)
 }
-Main();
 
+async function MainTest(){
+  console.log(JSONencrypt(Buffer.from(JSON.stringify({})),generateKey("m"),generateIv()))
+}
+
+MainTest()
