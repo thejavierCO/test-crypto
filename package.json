@@ -12,6 +12,7 @@
   "dependencies": {
     "@stacks/encryption": "^4.3.0",
     "axios": "^0.27.2",
-    "cryptojs": "^2.5.3"
+    "cryptojs": "^2.5.3",
+    "ipfs-http-client": "^57.0.3"
   }
 }
