@@ -2,9 +2,6 @@ const { generateIv, generateKey, encrypt, decrypt} = require('./js/crypy.js')
 const { encryptECIES, decryptECIES } = require("@stacks/encryption")
 const { Dir } = require('./js/tools');
 
-const fs = require("fs")
-const path = require("path");
-
 const Test = new Dir("test")
 const Music = new Dir("temp")
 const Img = new Dir("img")
@@ -90,17 +87,19 @@ async function Main(){
   fileDec.data = decrypt(fileEnc1.data,filekey.data,fileiv.data)
 }
 
-async function test(data){
-  const privateKey = 'a5c61c6ca7b3e7e55edee68566aeab22e4da26baa285c7bd10e8d2218aa3b229';
-  const publicKey = '027d28f9951ce46538951e3697c62588a87f1f1f295de4a14fdd4c780fc52cfe69';
-  const testString = data;
-  // Encrypt string with public key
-  const cipherObj = await encryptECIES(publicKey, Buffer.from(testString), true);
-  return cipherObj;
-}
+// async function test(data){
+//   const privateKey = 'a5c61c6ca7b3e7e55edee68566aeab22e4da26baa285c7bd10e8d2218aa3b229';
+//   const publicKey = '027d28f9951ce46538951e3697c62588a87f1f1f295de4a14fdd4c780fc52cfe69';
+//   const testString = data;
+//   // Encrypt string with public key
+//   const cipherObj = await encryptECIES(publicKey, Buffer.from(testString), true);
+//   return cipherObj;
+// }
 
-test(fs.readFileSync(path.resolve(__dirname,"test","test.jpg")))
-.then(e=>{
-  let testFile = Test.getFile("encryptFile.json");
-  testFile.data = JSON.stringify(e);
-})
+// test(fs.readFileSync(path.resolve(__dirname,"test","test.jpg")))
+// .then(e=>{
+//   let testFile = Test.getFile("encryptFile.json");
+//   testFile.data = JSON.stringify(e);
+// })
+
+Main()
